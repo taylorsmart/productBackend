@@ -3,8 +3,11 @@
 # Logs
 logs
 *.log
+<<<<<<< HEAD
 *.csv
 data/
+=======
+>>>>>>> dbefecdcf59fd8c16c00fd93a9f509ca43050d2d
 
 # Runtime data
 pids
