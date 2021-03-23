@@ -22,7 +22,10 @@ client.query('SELECT NOW()', (err, res) => {
   console.log(err, res)
 })
 
-client.query('SELECT * from test_table', (err, res) => {
+client.query('SELECT * from test_table join (select * from reviews) ', (err, res) => {
   console.log(err, res)
   client.end() // Ensure this is in the final line.
 })
+
+
+//`SELECT products.product_id,  products.name, products.slogan, products.description, products.category, products.default_price, JSON_ARRAYAGG( JSON_OBJECT( ‘f_id’, features.product_id, ‘f_feature’, features.feature, ‘f_value’, features.value) ) AS feature_data FROM products JOIN features ON products.product_id=features.product_id WHERE products.product_id=?`
