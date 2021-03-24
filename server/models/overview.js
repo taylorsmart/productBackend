@@ -23,7 +23,8 @@ client.connect()
 // })
 
 const queries = {
-  getProducts: (id,callback) => {
+  getProducts: (data,callback) => {
+    console.log(`Executing getProducts info for data ${data}`)
     client.query(' \
         SELECT \
           pt.id,\
@@ -33,8 +34,8 @@ const queries = {
           pt.category, \
           pt.default_price \
         from product as pt \
-        offset 10 limit 10; \
-      ', (err, res) => {
+        offset $1 limit $2; \
+      ',data , (err, res) => {
         if (err) {
           callback(err,null);
         } else {
@@ -43,6 +44,7 @@ const queries = {
       })
   },
   getProductInfo: (id,callback) => {
+    console.log(`Executing product info for id ${id}`)
     client.query(
           `SELECT \
             pt.id as id, \
@@ -62,12 +64,12 @@ const queries = {
                   ) \
                 ) as features \
               from feature as ft \
-              where ft.product_id=18082 \
+              where ft.product_id= $1 \
               group by ft.product_id \
             ) as subft \
             on pt.id=subft.product_id \
-            where pt.id =18082;`
-          , (err, res) => {
+            where pt.id =$1;`
+          ,[id] , (err, res) => {
         if (err) {
           callback(err,null);
         } else {
@@ -76,13 +78,9 @@ const queries = {
       })
   },
   getStyle:  (id,callback) => {
-    console.log(`Processing getStyle with id: `)
-    client.query(' \
-        SELECT \
-          so.results\
-        from style_optimized as so \
-        where product_id=18081; \
-      ', (err, res) => {
+    console.log(`Executing getStyle info for id ${id}`)
+
+    client.query('SELECT so.results from style_optimized as so where product_id=$1;', [id], (err, res) => {
         if (err) {
           callback(err,null);
         } else {
